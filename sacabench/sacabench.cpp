@@ -22,9 +22,6 @@
 #include <stdio.h>
 #include <string.h>
 
-//energy measurements
-#include "util/likwid_myapi.h"
-
 bool file_exist_check(std::string const& path) {
     std::ifstream f(path.c_str());
     bool res = f.good();
@@ -762,33 +759,7 @@ std::int32_t main(std::int32_t argc, char const** argv) {
         nlohmann::json stat_array = nlohmann::json::array();
 
         size_t sanity_counter = 0;
-        /* BEGIN LIKWID ENERGY SETUP */
-            // std::cerr << "ENERGY" << std::endl;
-
-            // cpus is gonna be a dynamic array
-            // int* cpus;
-            // int gid;
-            // double result = 0.0;
-            // char estr[] = "PWR_PKG_ENERGY:PWR0,PWR_DRAM_ENERGY:PWR3";
-            // char* enames[] = {"PWR_PKG_ENERGY:PWR0", "PWR_DRAM_ENERGY:PWR3"};
-            // int n = sizeof(enames) / sizeof(enames[0]);
-
-            // if(setup_likwid(&cpus))
-            // {
-            //     return 1;
-            // }
-            // if(setup_event_set(estr, gid)) // and setup counters
-            // {
-            //     return 1;
-            // }
-           
-            // if (cpus == nullptr)
-            //     printf("Ptr is still null! \n");
- 
-        /* END LIKWID ENERGY SETUP */
-        // int alg_n = 0;
-        // bool stop_skipping = false;
-
+        
         for (const auto& algo : saca_list) {
             if (!whitelist.empty()) {
                 if (std::find(whitelist.begin(), whitelist.end(),
@@ -808,24 +779,7 @@ std::int32_t main(std::int32_t argc, char const** argv) {
                 {
                     std::cerr << "Running " << algo->name() << " (" << (i + 1)
                               << "/" << repetition_count << ")" << std::endl;
-                    
-                    //if(alg_n == 0)
-                    //    start_counters(gid);
-                    // if (!stop_skipping)
-                    // {
-                    //     if (algo->name() != "DC3-Lite")
-                    //     {
-                    //             printf("skipping!");
-                    //             continue;
-                    //     }
-                    //     else {
-                    //         start_counters(gid);
-                    //         stop_skipping=true;
-                    //     }
-                    // }
-                    auto sa = algo->construct_sa(*text, sa_minimum_bits);
-                    // read_counters(gid);
-                    // print_events(n, cpus, gid, enames);
+                   auto sa = algo->construct_sa(*text, sa_minimum_bits);
 
                     maybe_do_sa_check(*text, *sa);
 
@@ -834,13 +788,7 @@ std::int32_t main(std::int32_t argc, char const** argv) {
                 alg_array.push_back(root.to_json());
             }
             stat_array.push_back(alg_array);
-            // alg_n++;
         }
-        /*ENERGY MEASUREMETNS */
-        // stop_counters(gid);
-        // print_total_meauserements(n, cpus, gid, enames);
-        // finalize_all();
-        /*ENERGY MEASUREMETNS */
         maybe_do_output_benchmark(stat_array);
         maybe_do_latexplot(text->text_size(), repetition_count);
 

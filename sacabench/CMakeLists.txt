@@ -44,7 +44,6 @@ target_link_libraries(sacabench
   CLI11
   atomic
   OpenMP::OpenMP_CXX
-  likwid
 )
 target_compile_options(sacabench PUBLIC
   ${SACA_BENCH_FLAGS}
