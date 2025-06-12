@@ -7,9 +7,6 @@ SACA_REGISTER("saca/external/deep_shallow.hpp"
 SACA_REGISTER("saca/external/divsufsort/divsufsort.hpp"
     sacabench::reference_sacas::div_suf_sort)
 
-SACA_REGISTER("saca/external/parallel_divsufsort/parallel_divsufsort.hpp"
-    sacabench::reference_sacas::parallel_div_suf_sort)
-
 SACA_REGISTER("saca/external/divsufsort/divsufsort_par.hpp"
     sacabench::reference_sacas::div_suf_sort_par)
 
@@ -44,15 +41,17 @@ SACA_REGISTER("saca/external/dc3/dc3.hpp"
         sacabench::reference_sacas::dc3)
 
 # Our implementations:
-
+  
 SACA_REGISTER("saca/deep_shallow/saca.hpp"
     sacabench::deep_shallow::serial)
 
-SACA_REGISTER("saca/deep_shallow/saca.hpp"
-    sacabench::deep_shallow::serial_big_buckets)
+# DIDN'T WORK
+#SACA_REGISTER("saca/deep_shallow/saca.hpp"
+#   sacabench::deep_shallow::serial_big_buckets)
 
-SACA_REGISTER("saca/deep_shallow/saca.hpp"
-    sacabench::deep_shallow::parallel)
+# DIDN'T WORK
+#SACA_REGISTER("saca/deep_shallow/saca.hpp"
+#    sacabench::deep_shallow::parallel)
 
 SACA_REGISTER("saca/bucket_pointer_refinement.hpp"
     sacabench::bucket_pointer_refinement::bucket_pointer_refinement)
@@ -60,8 +59,6 @@ SACA_REGISTER("saca/bucket_pointer_refinement.hpp"
 SACA_REGISTER("saca/bucket_pointer_refinement_parallel.hpp"
     sacabench::bucket_pointer_refinement_parallel::bucket_pointer_refinement_parallel)
 
-SACA_REGISTER("saca/external/bucket_pointer_refinement/bucket_pointer_refinement_wrapper.hpp"
-    sacabench::bucket_pointer_refinement_ext::bucket_pointer_refinement_ext)
 
 SACA_REGISTER("saca/m_suf_sort.hpp"
     sacabench::m_suf_sort::m_suf_sort2)
@@ -111,8 +108,9 @@ SACA_REGISTER("saca/sads.hpp"
 SACA_REGISTER("saca/gsaca/gsaca.hpp"
     sacabench::gsaca::gsaca)
 
-SACA_REGISTER("saca/gsaca/gsaca_new.hpp"
-        sacabench::gsaca::gsaca_new)
+# Freezes: GSACA_Opt
+#SACA_REGISTER("saca/gsaca/gsaca_new.hpp"
+#        sacabench::gsaca::gsaca_new)
 
 SACA_REGISTER("saca/gsaca/gsaca_parallel.hpp"
         sacabench::gsaca::gsaca_parallel)
@@ -125,9 +123,9 @@ SACA_REGISTER("saca/qsufsort.hpp"
 
 SACA_REGISTER("saca/naive.hpp"
     sacabench::naive::naive)
-
-SACA_REGISTER("saca/naive.hpp"
-    sacabench::naive::naive_ips4o)
+# commented for some reason: I think it was locked 
+#SACA_REGISTER("saca/naive.hpp"
+#    sacabench::naive::naive_ips4o)
 
 SACA_REGISTER("saca/naive.hpp"
     sacabench::naive::naive_ips4o_parallel)
@@ -143,9 +141,9 @@ SACA_REGISTER("saca/dc3.hpp"
 
 SACA_REGISTER("saca/div_suf_sort/saca.hpp"
     sacabench::div_suf_sort::div_suf_sort)
-
-SACA_REGISTER("saca/nzSufSort.hpp"
-    sacabench::nzsufsort::nzsufsort)
+# SEGFAULT?
+#SACA_REGISTER("saca/nzSufSort.hpp"
+#    sacabench::nzsufsort::nzsufsort)
 
 SACA_REGISTER("saca/dc3_lite.hpp"
     sacabench::dc3_lite::dc3_lite)
@@ -168,8 +166,9 @@ SACA_REGISTER("saca/osipov/osipov_parallel.hpp"
 SACA_REGISTER("saca/osipov/osipov_parallel.hpp"
     sacabench::osipov::osipov_parallel_wp)
 
-if(SACA_ENABLE_CUDA)
-SACA_REGISTER("saca/osipov/osipov_gpu.hpp"
-    sacabench::osipov::osipov_gpu)
-endif()
+# removed for energy INefficiency
+#if(SACA_ENABLE_CUDA)
+#SACA_REGISTER("saca/osipov/osipov_gpu.hpp"
+#    sacabench::osipov::osipov_gpu)
+#endif()
 
