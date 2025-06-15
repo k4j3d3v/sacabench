@@ -821,7 +821,7 @@ std::int32_t main(std::int32_t argc, char const** argv) {
                     std::cerr << "Running " << algo->name() << " (" << (i + 1)
                               << "/" << repetition_count << ")" << std::endl;
                     
-                    if(out_benchmark && alg_n == 0)
+                    if(out_energy && alg_n == 0)
                        start_counters(gid);
               
                     auto sa = algo->construct_sa(*text, sa_minimum_bits);
