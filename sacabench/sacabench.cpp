@@ -341,6 +341,8 @@ std::int32_t main(std::int32_t argc, char const** argv) {
     std::string output_binary_filename = "";
     std::string algorithm = "";
     std::string benchmark_filename = "";
+    std::string energy_filename = "";
+
     std::vector<std::string> whitelist = {};
     std::vector<std::string> blacklist = {};
     bool check_sa = false;
@@ -456,6 +458,9 @@ std::int32_t main(std::int32_t argc, char const** argv) {
             .add_option("--blacklist", blacklist,
                         "Blacklist algorithms from execution")
             ->excludes(wlist);
+
+        batch.add_option("-e, --energy", energy_filename, "Measure energy consumption for each algorithm");
+        
         batch.add_flag("-z,--rplot", rplot, "Plots measurements with R.")
             ->needs(b_opt);
         batch
@@ -496,6 +501,7 @@ std::int32_t main(std::int32_t argc, char const** argv) {
     bool out_json = output_json_filename.size() != 0;
     bool out_binary = output_binary_filename.size() != 0;
     bool out_benchmark = benchmark_filename.size() != 0;
+    bool out_energy = energy_filename.size() != 0;
     auto check_out_filename = [&](std::string const& filename,
                                   std::string const& name) {
         if (!force_overwrite && filename.size() != 0 && filename != "-" &&
@@ -747,6 +753,9 @@ std::int32_t main(std::int32_t argc, char const** argv) {
         if (check_out_filename(benchmark_filename, "Benchmark")) {
             return 1;
         }
+        if (check_out_filename(energy_filename, "Energy")) {
+            return 1;
+        }
         if (check_in_filename(input_filename, "Input")) {
             return 1;
         }
@@ -762,32 +771,35 @@ std::int32_t main(std::int32_t argc, char const** argv) {
         nlohmann::json stat_array = nlohmann::json::array();
 
         size_t sanity_counter = 0;
-        /* BEGIN LIKWID ENERGY SETUP */
-            // std::cerr << "ENERGY" << std::endl;
 
-            // cpus is gonna be a dynamic array
-            // int* cpus;
-            // int gid;
-            // double result = 0.0;
-            // char estr[] = "PWR_PKG_ENERGY:PWR0,PWR_DRAM_ENERGY:PWR3";
-            // char* enames[] = {"PWR_PKG_ENERGY:PWR0", "PWR_DRAM_ENERGY:PWR3"};
-            // int n = sizeof(enames) / sizeof(enames[0]);
+        /* LIKWID ENERGY SETUP */
+        // cpus is gonna be a dynamic array
+        int* cpus;
+        int gid;
+        double result = 0.0;
+        char estr[] = "PWR_PKG_ENERGY:PWR0,PWR_DRAM_ENERGY:PWR3";
+        char* enames[] = {"PWR_PKG_ENERGY:PWR0", "PWR_DRAM_ENERGY:PWR3"};
+        int n = sizeof(enames) / sizeof(enames[0]);
+        if (out_energy)
+        {
+            std::cerr << "ENERGY measuring!" << std::endl;
 
-            // if(setup_likwid(&cpus))
-            // {
-            //     return 1;
-            // }
-            // if(setup_event_set(estr, gid)) // and setup counters
-            // {
-            //     return 1;
-            // }
+
+            if(setup_likwid(&cpus))
+            {
+                return 1;
+            }
+            if(setup_event_set(estr, gid)) // and setup counters
+            {
+                return 1;
+            }
            
-            // if (cpus == nullptr)
-            //     printf("Ptr is still null! \n");
- 
-        /* END LIKWID ENERGY SETUP */
-        // int alg_n = 0;
-        // bool stop_skipping = false;
+            if (cpus == nullptr)
+                printf("Ptr is still null! \n");
+        }
+        
+        // needed to start energy counters at first algorithm run
+        int alg_n = 0;
 
         for (const auto& algo : saca_list) {
             if (!whitelist.empty()) {
@@ -809,24 +821,16 @@ std::int32_t main(std::int32_t argc, char const** argv) {
                     std::cerr << "Running " << algo->name() << " (" << (i + 1)
                               << "/" << repetition_count << ")" << std::endl;
                     
-                    //if(alg_n == 0)
-                    //    start_counters(gid);
-                    // if (!stop_skipping)
-                    // {
-                    //     if (algo->name() != "DC3-Lite")
-                    //     {
-                    //             printf("skipping!");
-                    //             continue;
-                    //     }
-                    //     else {
-                    //         start_counters(gid);
-                    //         stop_skipping=true;
-                    //     }
-                    // }
+                    if(out_benchmark && alg_n == 0)
+                       start_counters(gid);
+              
                     auto sa = algo->construct_sa(*text, sa_minimum_bits);
-                    // read_counters(gid);
-                    // print_events(n, cpus, gid, enames);
-
+                    
+                    if(out_energy)
+                    {
+                        read_counters(gid);
+                        print_events(n, cpus, gid, enames);
+                    }
                     maybe_do_sa_check(*text, *sa);
 
                     log_root_stats(root, *algo, text->text_size());
@@ -834,13 +838,14 @@ std::int32_t main(std::int32_t argc, char const** argv) {
                 alg_array.push_back(root.to_json());
             }
             stat_array.push_back(alg_array);
-            // alg_n++;
+            alg_n++;
         }
-        /*ENERGY MEASUREMETNS */
-        // stop_counters(gid);
-        // print_total_meauserements(n, cpus, gid, enames);
-        // finalize_all();
-        /*ENERGY MEASUREMETNS */
+        if(out_energy)
+        {
+            stop_counters(gid);
+            print_total_meauserements(n, cpus, gid, enames);
+            finalize_all();
+        }
         maybe_do_output_benchmark(stat_array);
         maybe_do_latexplot(text->text_size(), repetition_count);
 
