@@ -763,31 +763,30 @@ std::int32_t main(std::int32_t argc, char const** argv) {
 
         size_t sanity_counter = 0;
         /* BEGIN LIKWID ENERGY SETUP */
-            // std::cerr << "ENERGY" << std::endl;
+            std::cerr << "ENERGY" << std::endl;
 
             // cpus is gonna be a dynamic array
-            // int* cpus;
-            // int gid;
-            // double result = 0.0;
-            // char estr[] = "PWR_PKG_ENERGY:PWR0,PWR_DRAM_ENERGY:PWR3";
-            // char* enames[] = {"PWR_PKG_ENERGY:PWR0", "PWR_DRAM_ENERGY:PWR3"};
-            // int n = sizeof(enames) / sizeof(enames[0]);
+            int* cpus;
+            int gid;
+            double result = 0.0;
+            char estr[] = "PWR_PKG_ENERGY:PWR0,PWR_DRAM_ENERGY:PWR3";
+            char* enames[] = {"PWR_PKG_ENERGY:PWR0", "PWR_DRAM_ENERGY:PWR3"};
+            int n = sizeof(enames) / sizeof(enames[0]);
 
-            // if(setup_likwid(&cpus))
-            // {
-            //     return 1;
-            // }
-            // if(setup_event_set(estr, gid)) // and setup counters
-            // {
-            //     return 1;
-            // }
+            if(setup_likwid(&cpus))
+            {
+                return 1;
+            }
+            if(setup_event_set(estr, gid)) // and setup counters
+            {
+                return 1;
+            }
            
-            // if (cpus == nullptr)
-            //     printf("Ptr is still null! \n");
+            if (cpus == nullptr)
+                printf("Ptr is still null! \n");
  
         /* END LIKWID ENERGY SETUP */
-        // int alg_n = 0;
-        // bool stop_skipping = false;
+        int alg_n = 0;
 
         for (const auto& algo : saca_list) {
             if (!whitelist.empty()) {
@@ -809,23 +808,12 @@ std::int32_t main(std::int32_t argc, char const** argv) {
                     std::cerr << "Running " << algo->name() << " (" << (i + 1)
                               << "/" << repetition_count << ")" << std::endl;
                     
-                    //if(alg_n == 0)
-                    //    start_counters(gid);
-                    // if (!stop_skipping)
-                    // {
-                    //     if (algo->name() != "DC3-Lite")
-                    //     {
-                    //             printf("skipping!");
-                    //             continue;
-                    //     }
-                    //     else {
-                    //         start_counters(gid);
-                    //         stop_skipping=true;
-                    //     }
-                    // }
+                    if(alg_n == 0)
+                       start_counters(gid);
+              
                     auto sa = algo->construct_sa(*text, sa_minimum_bits);
-                    // read_counters(gid);
-                    // print_events(n, cpus, gid, enames);
+                    read_counters(gid);
+                    print_events(n, cpus, gid, enames);
 
                     maybe_do_sa_check(*text, *sa);
 
@@ -834,12 +822,12 @@ std::int32_t main(std::int32_t argc, char const** argv) {
                 alg_array.push_back(root.to_json());
             }
             stat_array.push_back(alg_array);
-            // alg_n++;
+            alg_n++;
         }
         /*ENERGY MEASUREMETNS */
-        // stop_counters(gid);
-        // print_total_meauserements(n, cpus, gid, enames);
-        // finalize_all();
+        stop_counters(gid);
+        print_total_meauserements(n, cpus, gid, enames);
+        finalize_all();
         /*ENERGY MEASUREMETNS */
         maybe_do_output_benchmark(stat_array);
         maybe_do_latexplot(text->text_size(), repetition_count);
