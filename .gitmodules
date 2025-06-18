@@ -13,3 +13,6 @@
 [submodule "external/cub"]
 	path = external/cub
 	url = https://github.com/NVlabs/cub.git
+[submodule "external/likwid"]
+	path = external/likwid
+	url = https://github.com/RRZE-HPC/likwid
