@@ -1,0 +1,2 @@
+Previously removed: mostly (if not all) PARALLEL, just starving -> maybe some deadlock??
+nzSufSort: SegFault

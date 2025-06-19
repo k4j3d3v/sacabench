@@ -1,0 +1,9 @@
+diff a/sacabench/util/assertions.hpp b/sacabench/util/assertions.hpp	(rejected hunks)
+@@ -9,6 +9,7 @@
+ 
+ #include <iostream>
+ #include <sstream>
++#include <limits>
+ 
+ #include "stacktrace.hpp"
+ 

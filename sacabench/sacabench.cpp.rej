@@ -1,0 +1,9 @@
+diff a/sacabench/sacabench.cpp b/sacabench/sacabench.cpp	(rejected hunks)
+@@ -270,6 +270,7 @@ void do_plot(std::string const& benchmark_filename, bool out_benchmark) {
+                   << SACABENCH_SOURCE_DIRECTORY << "/stats/stat_plot.R "
+                   << benchmark_filename << ".Rout";
+     } else if (out_benchmark) {
++        
+         r_command << " 0 " << short_input_filename << " " << text_size << "'  "
+                   << SACABENCH_SOURCE_DIRECTORY << "/stats/stat_plot.R "
+                   << benchmark_filename << ".Rout";

@@ -1,0 +1,10 @@
+diff a/sacabench/saca/register.cmake b/sacabench/saca/register.cmake	(rejected hunks)
+@@ -60,8 +60,6 @@ SACA_REGISTER("saca/bucket_pointer_refinement.hpp"
+ SACA_REGISTER("saca/bucket_pointer_refinement_parallel.hpp"
+     sacabench::bucket_pointer_refinement_parallel::bucket_pointer_refinement_parallel)
+ 
+-SACA_REGISTER("saca/external/bucket_pointer_refinement/bucket_pointer_refinement_wrapper.hpp"
+-    sacabench::bucket_pointer_refinement_ext::bucket_pointer_refinement_ext)
+ 
+ SACA_REGISTER("saca/m_suf_sort.hpp"
+     sacabench::m_suf_sort::m_suf_sort2)

@@ -1,0 +1,10 @@
+diff a/external/reference_impls/deep-shallow/shallow.c b/external/reference_impls/deep-shallow/shallow.c	(rejected hunks)
+@@ -18,7 +18,7 @@ extern Int32 Mk_qs_thresh;         // recursion limit for mk quicksort:
+                                    // using insertion sort
+ 
+ // ----- "local" global variables
+-Int32 Shallow_limit;               // Max depth for shallow sorting
++extern Int32 Shallow_limit;               // Max depth for shallow sorting
+ UChar *Shallow_text_limit;         // Text+Shallow_limit
+ 
+ #define UNROLL 1                   // if !=0 partially unroll shallow_mkq

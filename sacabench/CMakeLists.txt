@@ -22,10 +22,6 @@ target_link_libraries(saca_bench_lib INTERFACE
   divsufsort64
   divsufsort_par
   divsufsort_par64
-  parallel_divsufsort
-  reference_bpr2_SuffixArray
-  reference_bpr2_Util
-  reference_bpr2_Standard
   msufsort
   reference_dc3
   reference_saca_k
@@ -48,6 +44,7 @@ target_link_libraries(sacabench
   CLI11
   atomic
   OpenMP::OpenMP_CXX
+  likwid
 )
 target_compile_options(sacabench PUBLIC
   ${SACA_BENCH_FLAGS}

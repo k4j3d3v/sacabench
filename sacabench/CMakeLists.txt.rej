@@ -1,0 +1,11 @@
+diff a/sacabench/CMakeLists.txt b/sacabench/CMakeLists.txt	(rejected hunks)
+@@ -23,9 +23,6 @@ target_link_libraries(saca_bench_lib INTERFACE
+   divsufsort_par
+   divsufsort_par64
+   parallel_divsufsort
+-  reference_bpr2_SuffixArray
+-  reference_bpr2_Util
+-  reference_bpr2_Standard
+   msufsort
+   reference_dc3
+   reference_saca_k

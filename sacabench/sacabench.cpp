@@ -5,6 +5,7 @@
  ******************************************************************************/
 
 #include <cstdint>
+#include <cstring>
 #include <fstream>
 #include <iostream>
 #include <memory>
@@ -19,7 +20,10 @@
 #include "source_dir_constant.hpp"
 
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
+
+//energy measurements
+#include "util/likwid_myapi.h"
 
 bool file_exist_check(std::string const& path) {
     std::ifstream f(path.c_str());
@@ -270,6 +274,7 @@ void do_plot(std::string const& benchmark_filename, bool out_benchmark) {
                   << SACABENCH_SOURCE_DIRECTORY << "/stats/stat_plot.R "
                   << benchmark_filename << ".Rout";
     } else if (out_benchmark) {
+        
         r_command << " 0 " << short_input_filename << " " << text_size << "'  "
                   << SACABENCH_SOURCE_DIRECTORY << "/stats/stat_plot.R "
                   << benchmark_filename << ".Rout";
@@ -314,6 +319,7 @@ load_input(std::string const& input_filename, std::string const& prefix_size,
 std::int32_t main(std::int32_t argc, char const** argv) {
     int late_fail = 0;
     using namespace sacabench;
+
 
     CLI::App app{"CLI for SACABench."};
     app.require_subcommand();
@@ -756,6 +762,33 @@ std::int32_t main(std::int32_t argc, char const** argv) {
         nlohmann::json stat_array = nlohmann::json::array();
 
         size_t sanity_counter = 0;
+        /* BEGIN LIKWID ENERGY SETUP */
+            // std::cerr << "ENERGY" << std::endl;
+
+            // cpus is gonna be a dynamic array
+             int* cpus;
+             int gid;
+             double result = 0.0;
+             char estr[] = "PWR_PKG_ENERGY:PWR0,PWR_DRAM_ENERGY:PWR3";
+             char* enames[] = {"PWR_PKG_ENERGY:PWR0", "PWR_DRAM_ENERGY:PWR3"};
+             int n = sizeof(enames) / sizeof(enames[0]);
+
+             if(setup_likwid(&cpus))
+             {
+                 return 1;
+             }
+             if(setup_event_set(estr, gid)) // and setup counters
+             {
+                 return 1;
+             }
+           
+             if (cpus == nullptr)
+                 printf("Ptr is still null! \n");
+ 
+        /* END LIKWID ENERGY SETUP */
+         int alg_n = 0;
+        // bool stop_skipping = false;
+
         for (const auto& algo : saca_list) {
             if (!whitelist.empty()) {
                 if (std::find(whitelist.begin(), whitelist.end(),
@@ -775,8 +808,12 @@ std::int32_t main(std::int32_t argc, char const** argv) {
                 {
                     std::cerr << "Running " << algo->name() << " (" << (i + 1)
                               << "/" << repetition_count << ")" << std::endl;
-
-                    auto sa = algo->construct_sa(*text, sa_minimum_bits);
+                    
+                    if(alg_n == 0)
+                        start_counters(gid);
+                                        auto sa = algo->construct_sa(*text, sa_minimum_bits);
+                     read_counters(gid);
+                     print_events(n, cpus, gid, enames);
 
                     maybe_do_sa_check(*text, *sa);
 
@@ -785,8 +822,13 @@ std::int32_t main(std::int32_t argc, char const** argv) {
                 alg_array.push_back(root.to_json());
             }
             stat_array.push_back(alg_array);
+            alg_n++;
         }
-
+        /*ENERGY MEASUREMETNS */
+         stop_counters(gid);
+        // print_total_meauserements(n, cpus, gid, enames);
+         finalize_all();
+        /*ENERGY MEASUREMETNS */
         maybe_do_output_benchmark(stat_array);
         maybe_do_latexplot(text->text_size(), repetition_count);
 
@@ -865,7 +907,10 @@ std::int32_t main(std::int32_t argc, char const** argv) {
         }
     }
 
+
+
     return late_fail;
+
 }
 
 /******************************************************************************/
