@@ -125,21 +125,8 @@ endif()
 
 add_subdirectory(test)
 add_subdirectory(bigtest)
-## LIKWID Setup ##
-include(ExternalProject)  # Required for ExternalProject_Add
 
-include(ExternalProject)
 
-ExternalProject_Add(
-  likwid_project
-  SOURCE_DIR ${CMAKE_SOURCE_DIR}/external/likwid
-  CONFIGURE_COMMAND ""  # No configure step for Make-based builds
-  BUILD_COMMAND make
-  INSTALL_COMMAND make install PREFIX=${CMAKE_BINARY_DIR}/likwid-install
-  BUILD_IN_SOURCE 1 
-  BUILD_BYPRODUCTS ${CMAKE_BINARY_DIR}/likwid-install/lib/liblikwid.so
-  STEP_TARGETS build install
-)
 
 
 ################################################################################

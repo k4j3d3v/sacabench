@@ -54,15 +54,6 @@ target_compile_options(sacabench PUBLIC
 configure_file(util/source_dir_constant.hpp.in
                source_dir_constant.hpp)
 target_include_directories(sacabench PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
-# likwid setup
-target_include_directories(sacabench PRIVATE ${CMAKE_SOURCE_DIR}/external/likwid/src/includes)
-add_dependencies(sacabench likwid_project)
-target_link_directories(sacabench PRIVATE
-    /usr/local/lib
-)
-
-
-
 
 # A debugging tool (legacy)
 add_executable(sacabench-tools
