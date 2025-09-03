@@ -25,6 +25,7 @@ target_link_libraries(saca_bench_lib INTERFACE
   msufsort
   reference_dc3
   reference_saca_k
+  caps_sa
   ${CMAKE_DL_LIBS}
   atomic
 )

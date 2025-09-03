@@ -116,6 +116,8 @@ add_subdirectory(external/reference_impls/divsufsort_par)
 add_subdirectory(external/reference_impls/dc3)
 add_subdirectory(external/reference_impls/msufsort)
 add_subdirectory(external/reference_impls/saca_k)
+add_subdirectory(external/reference_impls/CaPS-SA)
+
 #add_subdirectory(external/reference_impls/parallel_divsufsort)
 
 if(SACA_ENABLE_CUDA)

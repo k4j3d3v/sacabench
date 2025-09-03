@@ -6,3 +6,4 @@ sacabench.kdev4
 cmake-build-debug/
 .c/
 .vscode/
+CMakeFiles/
