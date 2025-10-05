@@ -117,6 +117,7 @@ add_subdirectory(external/reference_impls/dc3)
 add_subdirectory(external/reference_impls/msufsort)
 add_subdirectory(external/reference_impls/saca_k)
 add_subdirectory(external/reference_impls/CaPS-SA)
+add_subdirectory(external/reference_impls/lfgsaca)
 
 #add_subdirectory(external/reference_impls/parallel_divsufsort)
 

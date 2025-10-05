@@ -43,6 +43,10 @@ SACA_REGISTER("saca/external/dc3/dc3.hpp"
 SACA_REGISTER("saca/external/caps-sa.hpp"
         sacabench::reference_sacas::caps_sa)
 
+SACA_REGISTER("saca/external/fgsaca_external.hpp"
+        sacabench::reference_sacas::fgsaca_external)
+
+
 # Our implementations:
   
 SACA_REGISTER("saca/deep_shallow/saca.hpp"
