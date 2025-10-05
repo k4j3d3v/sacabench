@@ -63,45 +63,28 @@ target_link_libraries(caps_sa PUBLIC Threads::Threads)
 # ======================
 # 6. External dependency: parlaylib
 # ======================
-# Check if parlaylib is already present, if not fetch it
+# We use ExternalProject_Add to fetch parlaylib from GitHub.
 include(ExternalProject)
 
 # Where to copy parlay's headers inside the build tree.
 set(PARLAY_BUILD_INCLUDE ${CMAKE_CURRENT_BINARY_DIR}/parlay)
 file(MAKE_DIRECTORY ${PARLAY_BUILD_INCLUDE})
 
-set(PARLAY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/parlaylib)
+message("Build system will fetch and install parlaylib")
 
-# Check if parlaylib directory exists and has the expected structure
-if(EXISTS ${PARLAY_SOURCE_DIR}/include/parlay)
-    message("Found existing parlaylib at ${PARLAY_SOURCE_DIR}")
-    # Copy headers directly without ExternalProject
-    execute_process(
-        COMMAND ${CMAKE_COMMAND} -E copy_directory 
-        ${PARLAY_SOURCE_DIR}/include/parlay 
-        ${PARLAY_BUILD_INCLUDE}
-    )
-else()
-    message("Build system will fetch and install parlaylib")
-    
-    ExternalProject_Add(prj_parlaylib
-        DOWNLOAD_DIR        ${CMAKE_CURRENT_SOURCE_DIR}/external
-        DOWNLOAD_COMMAND    ""  # Empty download command
-        SOURCE_DIR          ${PARLAY_SOURCE_DIR}
-        BUILD_IN_SOURCE     TRUE
-        INSTALL_DIR         ${CMAKE_CURRENT_BINARY_DIR}
-        CONFIGURE_COMMAND   ""
-        BUILD_COMMAND       ""
-        INSTALL_COMMAND     cp -rf include/parlay ${PARLAY_BUILD_INCLUDE}
-        # Use GIT_REPOSITORY instead of DOWNLOAD_COMMAND for better handling
-        GIT_REPOSITORY      https://github.com/cmuparlay/parlaylib.git
-        GIT_TAG             main
-        GIT_SHALLOW         TRUE
-    )
-    
-    # Ensure caps_sa only builds *after* parlaylib is fetched/copied
-    add_dependencies(caps_sa prj_parlaylib)
-endif()
+ExternalProject_Add(prj_parlaylib
+    DOWNLOAD_DIR        ${CMAKE_CURRENT_SOURCE_DIR}/external              # Download location
+    DOWNLOAD_COMMAND    git clone https://github.com/cmuparlay/parlaylib.git
+    SOURCE_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/external/parlaylib    # Where source lives
+    BUILD_IN_SOURCE     TRUE
+    INSTALL_DIR         ${CMAKE_CURRENT_BINARY_DIR}                       # Install location
+    CONFIGURE_COMMAND   ""    # No configure step
+    BUILD_COMMAND       ""    # No build step (header-only)
+    INSTALL_COMMAND     cp -rf include/parlay ${PARLAY_BUILD_INCLUDE}     # Copy headers to build dir
+)
+
+# Ensure caps_sa only builds *after* parlaylib is fetched/copied
+add_dependencies(caps_sa prj_parlaylib)
 
 # ======================
 # 7. Include directories
