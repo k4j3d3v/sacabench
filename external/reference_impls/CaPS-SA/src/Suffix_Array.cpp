@@ -472,23 +472,11 @@ void Suffix_Array<T_idx_>::construct()
 
     permute();
 
-    std::cout<<"Let's print after population SA: "<<std::endl;
-    for (idx_t i = 0; i < n_; i++)
-    {
-        std::cout<<SA_w[i]<<" ";
-	}
-    std::cout<<std::endl;
 
     // merge_sort(SA_w, SA_, n_, LCP_, LCP_w);  // Monolithic construction.
 
     sort_subarrays();
 
-    std::cout<<"Let's print after population SA: "<<std::endl;
-    for (idx_t i = 0; i < n_; i++)
-    {
-        std::cout<<SA_w[i]<<" ";
-	}
-    std::cout<<std::endl;
 
     select_pivots();
 
@@ -503,20 +491,6 @@ void Suffix_Array<T_idx_>::construct()
 
     clean_up();
         
-    std::cout<<"Let's print at the very end SA: "<<std::endl;
-    for (idx_t i = 0; i < n_; i++)
-    {
-        std::cout<<SA_w[i]<<" ";
-	}
-    std::cout<<std::endl;
-    for (idx_t i = 0; i < n_; i++)
-    {
-        for(idx_t j=SA_w[i]; j<n_; j++)
-            std::cout<<int(T_[j]);
-        std::cout<<std::endl;
-	}
-    std::cout<<std::endl;
-    
 
     const auto t_end = now();
     std::cerr << "Constructed the suffix array. Time taken: " << duration(t_end - t_start) << " seconds.\n";

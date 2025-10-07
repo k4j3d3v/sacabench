@@ -20,12 +20,6 @@ namespace sacabench::reference_sacas {
     			const std::size_t max_context(0);
                 constexpr char lookup[4] = {'A', 'C', 'T', 'G'};
 
-				std::size_t n = text.size();                // .length();
-				std::string tmp(text.begin(), text.end());
-    			for (size_t i = 0; i < text.size(); i++) {
-    				unsigned char c = text[i];
-    				std::cout << "char[" << i << "] = " << int(c) << " ('" << c << "')" << std::endl;
-				}
 // 				say we ignore this normalization
 //                parlay::blocked_for(0, text.size(), 65536,
 //      				[&, n](size_t i, size_t start, size_t end) {
