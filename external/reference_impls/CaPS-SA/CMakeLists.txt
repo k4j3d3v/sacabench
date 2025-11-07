@@ -67,8 +67,8 @@ target_link_libraries(caps_sa PUBLIC Threads::Threads)
 include(ExternalProject)
 
 # Where to copy parlay's headers inside the build tree.
-set(PARLAY_BUILD_INCLUDE ${CMAKE_CURRENT_BINARY_DIR}/parlay)
-file(MAKE_DIRECTORY ${PARLAY_BUILD_INCLUDE})
+set(PARLAY_BUILD_INCLUDE ${CMAKE_CURRENT_BINARY_DIR})
+file(MAKE_DIRECTORY ${PARLAY_BUILD_INCLUDE}/parlay)
 
 set(PARLAY_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/parlaylib)
 
@@ -79,7 +79,7 @@ if(EXISTS ${PARLAY_SOURCE_DIR}/include/parlay)
     execute_process(
         COMMAND ${CMAKE_COMMAND} -E copy_directory 
         ${PARLAY_SOURCE_DIR}/include/parlay 
-        ${PARLAY_BUILD_INCLUDE}
+        ${PARLAY_BUILD_INCLUDE}/parlay
     )
 else()
     message("Build system will fetch and install parlaylib")

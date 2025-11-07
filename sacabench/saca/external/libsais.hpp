@@ -4,8 +4,9 @@
 #include <util/span.hpp>
 #include <cstdint>
 
-extern "C" int32_t libsais_omp(const uint8_t * T, int32_t * SA, int32_t n, int32_t fs, int32_t threads);
-extern "C" int64_t libsais64_omp(const uint8_t * T, int64_t * SA, int64_t n, int64_t fs, int64_t threads);
+extern "C" int32_t libsais_omp(const uint8_t * T, int32_t * SA, int32_t n, int32_t fs, int32_t * freq, int32_t threads);
+extern "C" int64_t libsais64_omp(const uint8_t * T, int64_t * SA, int64_t n, int64_t fs, int64_t * freq, int64_t threads);
+
 
 namespace sacabench::reference_sacas 
 {
@@ -18,12 +19,12 @@ namespace sacabench::reference_sacas
 
         inline static int32_t libsais32_seq(const uint8_t * T, int32_t * SA, int32_t n)
         {
-            return libsais_omp(T, SA, n, 0, 1);
+            return libsais_omp(T, SA, n, 0, nullptr, 1);
         }
 
         inline static int64_t libsais64_seq(const uint8_t * T, int64_t * SA, int64_t n)
         {
-            return libsais64_omp(T, SA, n, 0, 1);
+            return libsais64_omp(T, SA, n, 0, nullptr, 1);
         }
 
         template <typename sa_index>
@@ -42,12 +43,12 @@ namespace sacabench::reference_sacas
 
         inline static int32_t libsais32_par(const uint8_t * T, int32_t * SA, int32_t n)
         {
-            return libsais_omp(T, SA, n, 0, 0);
+            return libsais_omp(T, SA, n, 0, nullptr, 0);
         }
 
         inline static int64_t libsais64_par(const uint8_t * T, int64_t * SA, int64_t n)
         {
-            return libsais64_omp(T, SA, n, 0, 0);
+            return libsais64_omp(T, SA, n, 0, nullptr, 0);
         }
 
         template <typename sa_index>
