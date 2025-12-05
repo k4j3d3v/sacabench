@@ -1,4 +1,7 @@
 #include <Suffix_Array.hpp>
+#include <vector>
+#include <string>
+#include <cstdint>
 #include <util/alphabet.hpp>
 #include <tudocomp_stat/StatPhase.hpp>
 #include "external_saca.hpp"
@@ -20,12 +23,8 @@ namespace sacabench::reference_sacas {
     			const std::size_t max_context(0);
                 constexpr char lookup[4] = {'A', 'C', 'T', 'G'};
 
-				std::size_t n = text.size();                // .length();
+				std::size_t n = text.size();
 				std::string tmp(text.begin(), text.end());
-    			for (size_t i = 0; i < text.size(); i++) {
-    				unsigned char c = text[i];
-    				std::cout << "char[" << i << "] = " << int(c) << " ('" << c << "')" << std::endl;
-				}
 // 				say we ignore this normalization
 //                parlay::blocked_for(0, text.size(), 65536,
 //      				[&, n](size_t i, size_t start, size_t end) {
@@ -57,18 +56,25 @@ namespace sacabench::reference_sacas {
         // Define helper functions (templates)
 template <typename IndexType>
 static void run_caps_sa(unsigned char* text, IndexType* sa, size_t n) {
-    // Construct the suffix array using CaPS_SA
-    // The template IndexType allows uint32_t or uint64_t
-    CaPS_SA::Suffix_Array<IndexType> suf_arr(
-        reinterpret_cast<char*>(text), // CaPS_SA expects char*
-        n,                             // length of the text
-	2,
-	0
-    );
-
+    bool ext_mem = false;
+    bool output_lcp = false;
+    std::size_t subproblem_count = 0;
+    std::size_t max_context = 0;
+    std::string ext_mem_path = "";
+    
+    // Use proper templating with the actual types passed
+    CaPS_SA::Suffix_Array<unsigned char, IndexType> suf_arr(
+        text, n, ext_mem, ext_mem_path, 
+        subproblem_count, max_context, output_lcp);
+        
+    // Actually construct the suffix array
     suf_arr.construct();
-
-
+    auto out_sa = suf_arr.SA();
+    
+    // Copy the result to the output suffix array
+    for (size_t i = 0; i < n; ++i) {
+        sa[i] = out_sa[i];
+    }
 }
     };
 } // namespace sacabench::reference_sacas

@@ -44,10 +44,13 @@ namespace sacabench::reference_sacas {
             // Need temporary array for type conversion
             std::vector<unsigned int> temp_sa(n);
             fgsaca<unsigned int, unsigned char>(text, temp_sa.data(), n, 256);
-            
             // Copy with type conversion
             std::copy(temp_sa.begin(), temp_sa.end(), sa);
         }
+            std::cerr<< "FGSACA: Suffix array construction completed for n = " << n << std::endl;
+            for (size_t i = 0; i < n; ++i) {
+                std::cerr << "sa[" << i << "] = " << sa[i] << std::endl;
+            } 
     }
 
 }; // class fgsaca
