@@ -69,7 +69,6 @@ namespace sacabench::reference_sacas {
     class ds1 : public dsh {
 
     public:
-        static constexpr size_t EXTRA_SENTINELS = 1;
         static constexpr char const *NAME = "DS1";
         static constexpr char const *DESCRIPTION =
                 "Lyndon words accelerate suffix sorting by Bertram et al.";
@@ -81,7 +80,6 @@ namespace sacabench::reference_sacas {
 
     class ds2 : public dsh {
     public:
-        static constexpr size_t EXTRA_SENTINELS = 1;
         static constexpr char const *NAME = "DS2";
         static constexpr char const *DESCRIPTION = "GSACA DS2 algorithm";
         static constexpr auto ds_algo = [](unsigned char* text, uint64_t* sa, std::size_t n) {
@@ -91,12 +89,51 @@ namespace sacabench::reference_sacas {
 
     class ds3 : public dsh {
     public:
-        static constexpr size_t EXTRA_SENTINELS = 1;
         static constexpr char const *NAME = "DS3";
         static constexpr char const *DESCRIPTION = "GSACA DS3 algorithm";
         static constexpr auto ds_algo = [](unsigned char* text, uint64_t* sa, std::size_t n) {
             ::gsaca_ds3<uint64_t, unsigned char>(text, sa, n);
         };
+    };
+
+    class ds1_par : public dsh {
+    public:
+        static constexpr char const *NAME = "DS1-PAR";
+        static constexpr char const *DESCRIPTION = "Parallel GSACA DS1 algorithm";
+        static constexpr auto ds_algo = [](unsigned char* text, uint64_t* sa, std::size_t n) {
+            ::gsaca_ds1_par<uint64_t, unsigned char>(text, sa, n);
+        };
+    };  
+    class ds2_par : public dsh {
+    public:
+        static constexpr char const *NAME = "DS2-PAR";          
+        static constexpr char const *DESCRIPTION = "Parallel GSACA DS2 algorithm";
+        static constexpr auto ds_algo = [](unsigned char* text, uint64_t* sa, std::size_t n) {
+            ::gsaca_ds2_par<uint64_t, unsigned char>(text, sa, n);
+        };
+    };  
+    class ds3_par : public dsh {
+    public:
+        static constexpr char const *NAME = "DS3-PAR";          
+        static constexpr char const *DESCRIPTION = "Parallel GSACA DS3 algorithm";
+        static constexpr auto ds_algo = [](unsigned char* text, uint64_t* sa, std::size_t n) {
+            ::gsaca_ds3_par<uint64_t, unsigned char>(text, sa, n);
+        };
+    };
+    class ds_for_lce : public dsh {
+    public:
+        static constexpr char const *NAME = "DS-FOR-LCE";          
+        static constexpr char const *DESCRIPTION = "GSACA FOR LCE algorithm";
+        static constexpr auto ds_algo = [](unsigned char* text, uint64_t* sa, std::size_t n) {
+            ::gsaca_for_lce<uint64_t, unsigned char>(text, sa, n);
+        };
+    private:
+        template <typename IndexType, typename AlgoFunc>
+            static void run_ds(unsigned char* text, IndexType* sa, std::size_t n, AlgoFunc algo_func) {
+                // Call the algorithm function passed as parameter
+                algo_func(text, sa, n);
+
+            }
     };
 
 } // namespace sacabench::reference_sacas

@@ -58,6 +58,18 @@ SACA_REGISTER("saca/external/dsh.hpp"
 SACA_REGISTER("saca/external/dsh.hpp"
         sacabench::reference_sacas::ds3)
 
+SACA_REGISTER("saca/external/dsh.hpp"
+        sacabench::reference_sacas::ds1_par)
+
+SACA_REGISTER("saca/external/dsh.hpp"
+        sacabench::reference_sacas::ds2_par)
+
+SACA_REGISTER("saca/external/dsh.hpp"
+        sacabench::reference_sacas::ds3_par)
+
+SACA_REGISTER("saca/external/dsh.hpp"
+        sacabench::reference_sacas::ds_for_lce)
+
 # Our implementations:
   
 SACA_REGISTER("saca/deep_shallow/saca.hpp"
