@@ -46,6 +46,17 @@ SACA_REGISTER("saca/external/caps-sa.hpp"
 SACA_REGISTER("saca/external/fgsaca_external.hpp"
         sacabench::reference_sacas::fgsaca_external)
 
+SACA_REGISTER("saca/external/dsh.hpp"
+        sacabench::reference_sacas::dsh)
+
+SACA_REGISTER("saca/external/dsh.hpp"
+        sacabench::reference_sacas::ds1)
+
+SACA_REGISTER("saca/external/dsh.hpp"
+        sacabench::reference_sacas::ds2)
+
+SACA_REGISTER("saca/external/dsh.hpp"
+        sacabench::reference_sacas::ds3)
 
 # Our implementations:
   

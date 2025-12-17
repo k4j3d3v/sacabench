@@ -19,36 +19,9 @@ namespace sacabench::reference_sacas {
         static void construct_sa(util::string_span text,
                                  sacabench::util::alphabet alphabet,
                                  util::span<sa_index> out_sa) {
-                const std::size_t subproblem_count(0);
-    			const std::size_t max_context(0);
-                constexpr char lookup[4] = {'A', 'C', 'T', 'G'};
-
-				std::size_t n = text.size();
-				std::string tmp(text.begin(), text.end());
-// 				say we ignore this normalization
-//                parlay::blocked_for(0, text.size(), 65536,
-//      				[&, n](size_t i, size_t start, size_t end) {
-//        				(void)i;
-//       				for (size_t j = start; j < std::min(end, n); ++j) {
-//          				char c = text[j];
-////          				text.[j] = lookup[((std::toupper(c) & 0x6) >> 1)];
-//        			};
-//    			});
-//
-//            	if(n <= std::numeric_limits<uint32_t>::max())
-//            	{
-//
-//                    external_saca_with_writable_text_one_size_only<sa_index, uint32_t, unsigned char>
-//                    (text, out_sa, text.size(), run_caps_sa<uint64_t>);
-//            	}
-//            	else
-            	{
 
                     external_saca_with_writable_text_one_size_only<sa_index, uint64_t, unsigned char>
                     (text, out_sa, text.size(), run_caps_sa<uint64_t>);
-            	}
-
-
     }
 
     private:

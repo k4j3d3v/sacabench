@@ -27,6 +27,7 @@ target_link_libraries(saca_bench_lib INTERFACE
   reference_saca_k
   caps_sa
   fgsaca
+  dsh
   ${CMAKE_DL_LIBS}
   atomic
 )
