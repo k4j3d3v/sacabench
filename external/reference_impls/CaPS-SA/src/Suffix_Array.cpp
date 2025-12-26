@@ -40,20 +40,20 @@ Suffix_Array<T_seq_, T_idx_>::Suffix_Array(const T_seq_* const T, const idx_t n,
 {
 
     // print all the input parameters
-    CAPS_SA_LOG(std::cerr << "Suffix_Array parameters:\n");
-    CAPS_SA_LOG(std::cerr << "T: " << T_ << "\n");
-    CAPS_SA_LOG(std::cerr << "n: " << n_ << "\n");
-    CAPS_SA_LOG(std::cerr << "p: " << p_ << "\n");
-    CAPS_SA_LOG(std::cerr << "ext_mem: " << ext_mem_ctr_ << "\n");
-    CAPS_SA_LOG(std::cerr << "ext_mem_path: " << ext_mem_path << "\n");
-    CAPS_SA_LOG(std::cerr << "max_context: " << max_context << "\n");
-    CAPS_SA_LOG(std::cerr << "output_lcp: " << op_lcp << "\n");
+    //CAPS_SA_LOG(std::cerr << "Suffix_Array parameters:\n");
+    //CAPS_SA_LOG(std::cerr << "T: " << T_ << "\n");
+    //CAPS_SA_LOG(std::cerr << "n: " << n_ << "\n");
+    //CAPS_SA_LOG(std::cerr << "p: " << p_ << "\n");
+    //CAPS_SA_LOG(std::cerr << "ext_mem: " << ext_mem_ctr_ << "\n");
+    //CAPS_SA_LOG(std::cerr << "ext_mem_path: " << ext_mem_path << "\n");
+    //CAPS_SA_LOG(std::cerr << "max_context: " << max_context << "\n");
+    //CAPS_SA_LOG(std::cerr << "output_lcp: " << op_lcp << "\n");
 
     assert(n_ >= 16);   // TODO: fix subproblem-count for small `n`.
 
     if(p_ > n_)
     {
-        CAPS_SA_LOG(std::cerr << "Incompatible subproblem-count. Aborting.\n");
+        //CAPS_SA_LOG(std::cerr << "Incompatible subproblem-count. Aborting.\n");
         std::exit(EXIT_FAILURE);
     }
 }
@@ -184,7 +184,7 @@ void Suffix_Array<T_seq_, T_idx_>::initialize()
 
     const auto t_e = now();
     (void)t_s; (void)t_e;
-    CAPS_SA_LOG(std::cerr << "Initialized required data structures. Time taken: " << duration(t_e - t_s) << " seconds.\n");
+    //CAPS_SA_LOG(std::cerr << "Initialized required data structures. Time taken: " << duration(t_e - t_s) << " seconds.\n");
 }
 
 
@@ -198,7 +198,7 @@ void Suffix_Array<T_seq_, T_idx_>::permute()
 
     const auto t_e = now();
     (void)t_s; (void)t_e;
-    CAPS_SA_LOG(std::cerr << "Populated the suffix array with a permutation. Time taken: " << duration(t_e - t_s) << " seconds.\n");
+    //CAPS_SA_LOG(std::cerr << "Populated the suffix array with a permutation. Time taken: " << duration(t_e - t_s) << " seconds.\n");
 }
 
 
@@ -219,15 +219,15 @@ void Suffix_Array<T_seq_, T_idx_>::sort_subarrays()
             assert(is_sorted(SA_ + i * subarr_size, subarr_size + (i < p_ - 1 ? 0 : n_ % p_), LCP_ + i * subarr_size));
 
             if(++solved_ % 8 == 0)
-                CAPS_SA_LOG(std::cerr << "\rSorted " << solved_ << " subarrays.");
+                //CAPS_SA_LOG(std::cerr << "\rSorted " << solved_ << " subarrays.");
         };
 
     parlay::parallel_for(0, p_, sort_subarr, 1);
-    CAPS_SA_LOG(std::cerr << "\n");
+    //CAPS_SA_LOG(std::cerr << "\n");
 
     const auto t_e = now();
     (void) t_s; (void) t_e;
-    CAPS_SA_LOG(std::cerr << "Sorted the subarrays independently. Time taken: " << duration(t_e - t_s) << " seconds.\n");
+    //CAPS_SA_LOG(std::cerr << "Sorted the subarrays independently. Time taken: " << duration(t_e - t_s) << " seconds.\n");
 }
 
 
@@ -263,7 +263,7 @@ void Suffix_Array<T_seq_, T_idx_>::sort_subarrays_ext_mem()
             assert(is_sorted(SA, len, LCP));
 
             if(++solved_ % 8 == 0)
-                CAPS_SA_LOG(std::cerr << "\rSorted and partitioned " << solved_ << " subarrays.");
+                //CAPS_SA_LOG(std::cerr << "\rSorted and partitioned " << solved_ << " subarrays.");
 
             // const auto pivot_off = p_id * sample_per_part_;
             // sample_pivots(SA, len, sample_per_part_, pivot_ + pivot_off);
@@ -283,7 +283,7 @@ void Suffix_Array<T_seq_, T_idx_>::sort_subarrays_ext_mem()
 
     solved_ = 0;
     parlay::parallel_for(0, p_, sort_distribute_subarr, 1);
-    CAPS_SA_LOG(std::cerr << "\n");
+    //CAPS_SA_LOG(std::cerr << "\n");
 
     const auto t_b = now();
     parlay::parallel_for(0, p_,
@@ -295,8 +295,8 @@ void Suffix_Array<T_seq_, T_idx_>::sort_subarrays_ext_mem()
 
     const auto t_e = now();
     (void)t_s; (void)t_e; (void) t_b;
-    CAPS_SA_LOG(std::cerr << "Sorted the subarrays independently and collated them into partitions. Time taken: " << duration(t_e - t_s) << " seconds.\n");
-    CAPS_SA_LOG(std::cerr << "Closing the buckets took: " << duration(t_e - t_b) << " seconds.\n");
+    //CAPS_SA_LOG(std::cerr << "Sorted the subarrays independently and collated them into partitions. Time taken: " << duration(t_e - t_s) << " seconds.\n");
+    //CAPS_SA_LOG(std::cerr << "Closing the buckets took: " << duration(t_e - t_b) << " seconds.\n");
 }
 
 
@@ -319,7 +319,7 @@ void Suffix_Array<T_seq_, T_idx_>::select_pivots()
 
     const auto t_e = now();
     (void)t_s; (void)t_e;
-    CAPS_SA_LOG(std::cerr << "Selected the global pivots. Time taken: " << duration(t_e - t_s) << " seconds.\n");
+    //CAPS_SA_LOG(std::cerr << "Selected the global pivots. Time taken: " << duration(t_e - t_s) << " seconds.\n");
 }
 
 
@@ -414,7 +414,7 @@ void Suffix_Array<T_seq_, T_idx_>::locate_pivots(idx_t* const P) const
 
     const auto t_e = now();
     (void)t_s; (void)t_e;
-    CAPS_SA_LOG(std::cerr << "Located the pivots in each sorted subarray. Time taken: " << duration(t_e - t_s) << " seconds.\n");
+    //CAPS_SA_LOG(std::cerr << "Located the pivots in each sorted subarray. Time taken: " << duration(t_e - t_s) << " seconds.\n");
 }
 
 
@@ -526,7 +526,7 @@ void Suffix_Array<T_seq_, T_idx_>::partition_sub_subarrays(const idx_t* const P)
 
     const auto t_e = now();
     (void)t_s; (void)t_e;
-    CAPS_SA_LOG(std::cerr << "Collated the sorted sub-subarrays into partitions. Time taken: " << duration(t_e - t_s) << " seconds.\n");
+    //CAPS_SA_LOG(std::cerr << "Collated the sorted sub-subarrays into partitions. Time taken: " << duration(t_e - t_s) << " seconds.\n");
 }
 
 
@@ -587,15 +587,15 @@ void Suffix_Array<T_seq_, T_idx_>::merge_sub_subarrays()
             sort_partition(X_j, Y_j, p_, sub_subarr_off, LCP_X_j, LCP_Y_j);
 
             if(++solved_ % 8 == 0)
-               CAPS_SA_LOG(std::cerr << "\rMerged " << solved_ << " partitions.");
+               //CAPS_SA_LOG(std::cerr << "\rMerged " << solved_ << " partitions.");
         };
 
     parlay::parallel_for(0, p_, sort_part, 1);  // Merge the sorted subarrays in each partitions.
-    CAPS_SA_LOG(std::cerr << "\n");
+    //CAPS_SA_LOG(std::cerr << "\n");
 
     const auto t_e = now();
     (void)t_s; (void)t_e;
-    CAPS_SA_LOG(std::cerr << "Merged the sorted subarrays in each partition. Time taken: " << duration(t_e - t_s) << " seconds.\n");
+    //CAPS_SA_LOG(std::cerr << "Merged the sorted subarrays in each partition. Time taken: " << duration(t_e - t_s) << " seconds.\n");
 }
 
 
@@ -644,19 +644,19 @@ void Suffix_Array<T_seq_, T_idx_>::merge_sub_subarrays_ext_mem()
                 LCP_b.rewrite(LCP.data(), part_sz); // TODO: note that `LCP[0] = 0`, which needs to be updated when concatenating the partitions afterwards.
 
             if(++solved_ % 8 == 0)
-                CAPS_SA_LOG(std::cerr << "\rMerged " << solved_ << " partitions.");
+                //CAPS_SA_LOG(std::cerr << "\rMerged " << solved_ << " partitions.");
         };
 
     solved_ = 0;
     parlay::parallel_for(0, p_, merge_sub_subarray, 1);
-    CAPS_SA_LOG(std::cerr << "\n");
+    //CAPS_SA_LOG(std::cerr << "\n");
 
 
     std::for_each(sub_subarr_idx_buf.cbegin(), sub_subarr_idx_buf.cend(), [](auto& buf){ deallocate(buf.unwrap()); });
 
     const auto t_e = now();
     (void)t_s; (void)t_e;
-    CAPS_SA_LOG(std::cerr << "Merged the sorted subarrays in each partition. Time taken: " << duration(t_e - t_s) << " seconds.\n");
+    //CAPS_SA_LOG(std::cerr << "Merged the sorted subarrays in each partition. Time taken: " << duration(t_e - t_s) << " seconds.\n");
 }
 
 
@@ -695,19 +695,19 @@ void Suffix_Array<T_seq_, T_idx_>::compute_partition_boundary_lcp()
 
     const auto t_e = now();
     (void)t_s; (void)t_e;
-    CAPS_SA_LOG(std::cerr << "Computed the LCPs at the partition boundaries. Time taken: " << duration(t_e - t_s) << " seconds.\n");
+    //CAPS_SA_LOG(std::cerr << "Computed the LCPs at the partition boundaries. Time taken: " << duration(t_e - t_s) << " seconds.\n");
 }
 
 template <typename T_seq_, typename T_idx_>
 void Suffix_Array<T_seq_, T_idx_>::remove_extmem_partitions()
 {
     if(!ext_mem_ctr_) {
-        CAPS_SA_LOG(std::cerr << "The remove_extmem_partitions() member has no effect when not using external memory construction. Please ensure you intended to call this member.\n");
+        //CAPS_SA_LOG(std::cerr << "The remove_extmem_partitions() member has no effect when not using external memory construction. Please ensure you intended to call this member.\n");
         return;
     } 
     
     if(!constructed) {
-        CAPS_SA_LOG(std::cerr << "The remove_extmem_partitions() member cannot be called on a Suffix_Array object that has not yet been constructed. Please ensure you intended to call this member here.\n");
+        //CAPS_SA_LOG(std::cerr << "The remove_extmem_partitions() member cannot be called on a Suffix_Array object that has not yet been constructed. Please ensure you intended to call this member here.\n");
         return;
     }
     if(!removed_extmem_partitions) {
@@ -720,7 +720,7 @@ void Suffix_Array<T_seq_, T_idx_>::remove_extmem_partitions()
         parlay::parallel_for(0, p_, remove_bucket, 1);
         removed_extmem_partitions = true;
     } else {
-        CAPS_SA_LOG(std::cerr << "External memory partitions have already been removed. Please check why you may be calling this member more than once.\n");
+        //CAPS_SA_LOG(std::cerr << "External memory partitions have already been removed. Please check why you may be calling this member more than once.\n");
     }
 }
 
@@ -756,7 +756,7 @@ void Suffix_Array<T_seq_, T_idx_>::clean_up()
     constructed = true;
     const auto t_e = now();
     (void)t_s; (void)t_e;
-    CAPS_SA_LOG(std::cerr << "Released the temporary data structures. Time taken: " << duration(t_e - t_s) << " seconds.\n");
+    //CAPS_SA_LOG(std::cerr << "Released the temporary data structures. Time taken: " << duration(t_e - t_s) << " seconds.\n");
 }
 
 
@@ -769,7 +769,7 @@ void Suffix_Array<T_seq_, T_idx_>::print_stats() const
                         part_size_scan_[p_id + 1] - part_size_scan_[p_id] :
                         subproblem_space[p_id].unwrap().SA_bucket.size();
 
-    CAPS_SA_LOG(std::cerr << "Bucket stats: " << "\n");
+    //CAPS_SA_LOG(std::cerr << "Bucket stats: " << "\n");
 
     const auto sum =  std::accumulate(p_sz.cbegin(), p_sz.cend(), uint64_t(0));
     const auto mean = static_cast<double>(sum) / p_;
@@ -779,11 +779,11 @@ void Suffix_Array<T_seq_, T_idx_>::print_stats() const
     const auto sd = std::sqrt(var);
 
     (void) sd;
-    CAPS_SA_LOG(std::cerr << "\t Sum size:  " << sum << "\n");
-    CAPS_SA_LOG(std::cerr << "\t Max size:  " << *std::max_element(p_sz.cbegin(), p_sz.cend()) << "\n");
-    CAPS_SA_LOG(std::cerr << "\t Min size:  " << *std::min_element(p_sz.cbegin(), p_sz.cend()) << "\n");
-    CAPS_SA_LOG(std::cerr << "\t Mean size: " << mean << "\n");
-    CAPS_SA_LOG(std::cerr << "\t SD(size):  " << sd << "\n");
+    //CAPS_SA_LOG(std::cerr << "\t Sum size:  " << sum << "\n");
+    //CAPS_SA_LOG(std::cerr << "\t Max size:  " << *std::max_element(p_sz.cbegin(), p_sz.cend()) << "\n");
+    //CAPS_SA_LOG(std::cerr << "\t Min size:  " << *std::min_element(p_sz.cbegin(), p_sz.cend()) << "\n");
+    //CAPS_SA_LOG(std::cerr << "\t Mean size: " << mean << "\n");
+    //CAPS_SA_LOG(std::cerr << "\t SD(size):  " << sd << "\n");
 }
 
 
@@ -818,7 +818,7 @@ void Suffix_Array<T_seq_, T_idx_>::construct()
     constructed = true;
     const auto t_end = now();
     (void)t_start; (void)t_end;
-    CAPS_SA_LOG(std::cerr << "Constructed the suffix array. Time taken: " << duration(t_end - t_start) << " seconds.\n");
+    //CAPS_SA_LOG(std::cerr << "Constructed the suffix array. Time taken: " << duration(t_end - t_start) << " seconds.\n");
 }
 
 
@@ -843,7 +843,7 @@ void Suffix_Array<T_seq_, T_idx_>::construct_ext_mem()
     constructed = true;
     const auto t_end = now();
     (void)t_start; (void)t_end;
-    CAPS_SA_LOG(std::cerr << "Constructed the suffix array and the LCP array. Time taken: " << duration(t_end - t_start) << " seconds.\n");
+    //CAPS_SA_LOG(std::cerr << "Constructed the suffix array and the LCP array. Time taken: " << duration(t_end - t_start) << " seconds.\n");
 }
 
 
@@ -882,7 +882,7 @@ template <typename T_seq_, typename T_idx_>
 void Suffix_Array<T_seq_, T_idx_>::dump(std::ofstream& output) const 
 {
     std::cerr << "Dumping the suffix array to file...\n";
-    CAPS_SA_LOG(std::cerr << "LOG: Dumping the suffix array to file...\n");
+    //CAPS_SA_LOG(std::cerr << "LOG: Dumping the suffix array to file...\n");
     const auto t_start = now();
 
     const std::size_t n = n_;
@@ -921,7 +921,7 @@ void Suffix_Array<T_seq_, T_idx_>::dump(std::ofstream& output) const
 	}
     const auto t_end = now();
     (void)t_start; (void)t_end;
-    CAPS_SA_LOG(std::cerr << "Dumped the suffix array. Time taken: " << duration(t_end - t_start) << " seconds.\n");
+    //CAPS_SA_LOG(std::cerr << "Dumped the suffix array. Time taken: " << duration(t_end - t_start) << " seconds.\n");
 }
 
 
