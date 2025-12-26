@@ -218,7 +218,7 @@ void Suffix_Array<T_seq_, T_idx_>::sort_subarrays()
 
             assert(is_sorted(SA_ + i * subarr_size, subarr_size + (i < p_ - 1 ? 0 : n_ % p_), LCP_ + i * subarr_size));
 
-            if(++solved_ % 8 == 0)
+            //if(++solved_ % 8 == 0)
                 //CAPS_SA_LOG(std::cerr << "\rSorted " << solved_ << " subarrays.");
         };
 
@@ -262,7 +262,7 @@ void Suffix_Array<T_seq_, T_idx_>::sort_subarrays_ext_mem()
             merge_sort(SA_w, SA, len, LCP, LCP_w);
             assert(is_sorted(SA, len, LCP));
 
-            if(++solved_ % 8 == 0)
+            //if(++solved_ % 8 == 0)
                 //CAPS_SA_LOG(std::cerr << "\rSorted and partitioned " << solved_ << " subarrays.");
 
             // const auto pivot_off = p_id * sample_per_part_;
@@ -586,7 +586,7 @@ void Suffix_Array<T_seq_, T_idx_>::merge_sub_subarrays()
 
             sort_partition(X_j, Y_j, p_, sub_subarr_off, LCP_X_j, LCP_Y_j);
 
-            if(++solved_ % 8 == 0)
+            //if(++solved_ % 8 == 0)
                //CAPS_SA_LOG(std::cerr << "\rMerged " << solved_ << " partitions.");
         };
 
@@ -643,7 +643,7 @@ void Suffix_Array<T_seq_, T_idx_>::merge_sub_subarrays_ext_mem()
             if(op_lcp)  // TODO: output a json file and note this.
                 LCP_b.rewrite(LCP.data(), part_sz); // TODO: note that `LCP[0] = 0`, which needs to be updated when concatenating the partitions afterwards.
 
-            if(++solved_ % 8 == 0)
+            //if(++solved_ % 8 == 0)
                 //CAPS_SA_LOG(std::cerr << "\rMerged " << solved_ << " partitions.");
         };
 
@@ -719,9 +719,10 @@ void Suffix_Array<T_seq_, T_idx_>::remove_extmem_partitions()
         };
         parlay::parallel_for(0, p_, remove_bucket, 1);
         removed_extmem_partitions = true;
-    } else {
-        //CAPS_SA_LOG(std::cerr << "External memory partitions have already been removed. Please check why you may be calling this member more than once.\n");
     }
+   // else {
+        //CAPS_SA_LOG(std::cerr << "External memory partitions have already been removed. Please check why you may be calling this member more than once.\n");
+    //}
 }
 
 template <typename T_seq_, typename T_idx_>
